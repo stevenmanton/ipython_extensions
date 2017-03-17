@@ -9,7 +9,7 @@ define(["require", "jquery", "base/js/namespace"], function (require, $, IPython
     a.attr("href", '#' + h.attr('id'));
     // get the text *excluding* the link text, whatever it may be
     var hclone = h.clone();
-    hclone.children().remove();
+    hclone.children().not('code').not('strong').not('em').remove();
     a.text(hclone.text());
     return a;
   };
@@ -65,13 +65,13 @@ define(["require", "jquery", "base/js/namespace"], function (require, $, IPython
     if (toc_wrapper.length === 0) {
       create_toc_div();
     }
-  
+
     var ol = $("<ol/>");
     ol.addClass("toc-item");
     $("#toc").empty().append(ol);
     var depth = 1;
     var li;
-    
+
     $("#notebook").find(":header").map(function(i, h) {
       var level = parseInt(h.tagName.slice(1), 10);
       // skip below threshold
@@ -103,14 +103,14 @@ define(["require", "jquery", "base/js/namespace"], function (require, $, IPython
 
     $(window).trigger('resize');
   };
-    
+
   var toggle_toc = function () {
     // toggle draw (first because of first-click behavior)
     $("#toc-wrapper").toggle();
     // recompute:
     table_of_contents();
   };
-  
+
   var toc_button = function () {
     if (!IPython.toolbar) {
       $([IPython.events]).on("app_initialized.NotebookApp", toc_button);
@@ -127,7 +127,7 @@ define(["require", "jquery", "base/js/namespace"], function (require, $, IPython
       ]);
     }
   };
-  
+
   var load_css = function () {
     var link = document.createElement("link");
     link.type = "text/css";
@@ -135,7 +135,7 @@ define(["require", "jquery", "base/js/namespace"], function (require, $, IPython
     link.href = require.toUrl("./toc.css");
     document.getElementsByTagName("head")[0].appendChild(link);
   };
-  
+
   var load_ipython_extension = function () {
     load_css();
     toc_button();
@@ -148,7 +148,7 @@ define(["require", "jquery", "base/js/namespace"], function (require, $, IPython
     load_ipython_extension : load_ipython_extension,
     toggle_toc : toggle_toc,
     table_of_contents : table_of_contents,
-    
+
   };
 
 });
